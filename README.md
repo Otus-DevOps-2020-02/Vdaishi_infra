@@ -1,16 +1,8 @@
 # Vdaishi_infra
 Vdaishi Infra repository
-bastion_IP = 35.214.140.200
-someinternalhost_IP = 10.164.0.3
-Для подключения в одну команду, требуется ввести :
-ssh -i ~/.ssh/appuser -A appuser@35.214.140.200 'ssh -tt 10.164.0.3'
-Для подключения к someinternalhost через команду ssh someinternalhost, требуется создать файл config в ~/.ssh/ со следующими данными
-Host someinternalhost
-HostName 10.164.0.3
-User appuser
-ProxyJump bastion
-
-Host bastion
-Hostname 35.214.140.200
-User appuser
-
+# Команда автоматической развертки
+gcloud compute instances create reddit-app-auto --boot-disk-size=10GB --image-family ubuntu-1604-lts --image-project=ubuntu-os-cloud --machine-type=g1-small --tags puma-server --restart-on-failure --metadata-from-file startup-script=./startup_config.sh --zone=europe-west4-a
+# команда создания через gcloud правила firewall
+gcloud compute firewall-rules create "default-puma-server" --allow=tcp:9292 --direction=ingress --network=default  --target-tags=puma-server --source-ranges=0.0.0.0/0
+testapp_IP = 34.90.229.174
+testapp_port = 9292
