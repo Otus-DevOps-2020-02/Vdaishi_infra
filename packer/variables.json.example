@@ -1,0 +1,10 @@
+{
+	"project_id": "testologic-12345",
+	"zone": "europe",
+        "source_image_family": "reddit-test",
+        "machine_type": "f1-micro",
+	"disk_size": "10",
+	"disk_type": "pd-standard",
+	"network": "default",
+	"tags": "pumba"
+}
