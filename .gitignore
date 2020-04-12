@@ -5,3 +5,4 @@ variables_immutable.json
 *.tfstate.backup
 *.tfvars
 .terraform/
+variables.tf

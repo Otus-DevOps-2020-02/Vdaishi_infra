@@ -36,7 +36,7 @@ resource "google_compute_url_map" "reddit-app-url-map" {
    default_service = google_compute_backend_service.reddit-app-backend-service.self_link
 }
 # Forward fule
-resource "google_compute_forwarding_rule" "reddit-app-forwarding-rule" {
+resource "google_compute_global_forwarding_rule" "reddit-app-forwarding-rule" {
 name = "reddit-app-forwarding-rule"
 target = google_compute_target_http_proxy.reddit-app-target-proxy.self_link
 port_range = "80-80"
