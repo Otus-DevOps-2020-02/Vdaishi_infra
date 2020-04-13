@@ -1,12 +1,19 @@
 # Vdaishi_infra
 Vdaishi Infra repository
+###### Надо пнуть себя и привести в порядок Readme.md - Слово безработного!
+https://eax.me/vim-commands/ - шпаргалка по Vim
+https://www.markdownguide.org/basic-syntax - шпаргалка по Markdown
+https://git-scm.com/book/ru/v2/ - Про Гит - книга
 # Команда автоматической развертки
+```
 gcloud compute instances create reddit-app-auto --boot-disk-size=10GB --image-family ubuntu-1604-lts --image-project=ubuntu-os-cloud --machine-type=g1-small --tags puma-server --restart-on-failure --metadata-from-file startup-script=./startup_config.sh --zone=europe-west4-a
+```
 # команда создания через gcloud правила firewall
+```
 gcloud compute firewall-rules create "default-puma-server" --allow=tcp:9292 --direction=ingress --network=default  --target-tags=puma-server --source-ranges=0.0.0.0/0
 testapp_IP = 34.90.229.174
 testapp_port = 9292
-
+```
 # Cоздание образа в Packer
 Шаблон создания образа Packer состоит из нескольких секций. В данном задании использовались секции Variable, Builders, Provisioners
 Секция Variable отвечает за поля, которые могут быть заполнены пользователем либо через использование -var либо var-file, и в дальнейшем используются при создании образа, которые используются секцией Builders, при создании шаблона.
@@ -16,11 +23,72 @@ testapp_port = 9292
 После выполнения всех манипуляций, Packer сохраняет автоматически образ в провайдере, который в дальнейшем можно использовать.
 
 При использовании методики Immutable infrastructure требуется создать образ, который будет меняться меньше всего.
-
+```
 packer validate -var-file=variables.json.example ubuntu16.json - проверка корректности кода создания образа Packer
 packer build -var-file=variables.json ubuntu16.json - создание образа Packer
 packer inspect ubuntu16.json - проверка функций, переменных используемых в коде
+```
 Собранный образ появится в браузерной консоли по пути Compute Engine --> Images.
 packer build --var-file=variables.json immutable.json
 Выполняем команду
+```
 gcloud compute instances create reddit-full --boot-disk-size=20 --image-family reddit-full --image-project=infra --machine-type=f1-micro --tags puma-server --restart-on-failure
+```
+
+---
+
+# Задание Terraform -1
+### Введение
+С помощью Terraform можно контролировать и создавать инфраструктуру и управлять ею. В данном уроке рассматривается создание и управление инфраструктурой в GCP.
+
+### Основные команды
+
+для работы с Terraform требуется качать пакет terraform необходимой версии с сайта https://www.terraform.io/downloads.html .
+Пример установки пакета Terraform на терминальную версию Ubuntu 18.04
+```
+wget https://releases.hashicorp.com/terraform/0.12.8/terraform_0.12.8_linux_amd64.zip
+unzip  terraform_0.12.8_linux_amd64.zip
+mv terraform ~bin/
+```
+Проверка версии Terraform
+```
+terraform -v
+```
+Перед началом работы с Terraform требуется выбрать каталог, в котором будут храниться файлы, перейти в него и произвести инициализацию Terraform.
+Пример инициализации Terraform в папке
+
+```
+cd terraform
+terraform init
+```
+### Основные файлы для работы с Terraform
+
+При работе с Terraform файлы с разрешением `.tf` являются конфигурационными, где хранится информация планируемой инфраструктуре. Файлы с разрешением .`tfvars` хранят в себе переменные, которые могут быть в дальнешнем использованы в конфигурации. Все используемые переменные задаются в файле `Variables.tf` , либо в отдельном блоке конфигурационного файла. В файле Output.tf можно описать атрибуты ресурсов, которые будут выводиться постоянно в случае исполнения команды `terraform apply`.
+
+### Работа с Terraform
+
+После инициализации Terraform и настройки конфигураций правильным действием будет использование команды `terraform validate -var-file="yourfile"` чтобы Terraform проверил, что не допущено ошибок в конфигурации.
+После валидации файлов, можно произвести просмотр плана развертывания конфигурации `terraform plan`. План конфигурации и изменений, вносимых в инфраструктуру будет выведен в консоли. Так же данный план будет выведен перед исполнением команды `terraform apply`, в случае, если не используется ключ ` -auto-appruve` .
+
+В результате применения команды `terraform apply` мы получим результат, в котором будет отображено количество измененных, созданных либо удаленных ресурсов в облаке.
+
+С помощью файла output.tf лучшим решением будет задать вывод информации об ip инстансов.
+
+###  Исполнение заданий со *
+###### задание 1
+В случае, если был создан SSH ключ в обход terraform, то при исполнении `terraform apply` будет удален тот ключ(и) которые не были описаны в конфигурации.
+###### задание 2
+При создании балансировщика создаем отдельный файл, в котором будут описаны все параметры.
+Особенности создания балансировщика :
+- При создании регионального балансировщика, требуется нахождение всех правил, которые запрашивают регион, в одном и том же регионе (зона ≠ регион)
+- Ресурсы для регионального и глобального балансировщика разные
+- Цепочка зависимости команд
+    * url-map
+        * Target http proxy
+            * Forwarding rule
+        * Backend service
+            * Instance group
+                *Instances
+            * Health check
+Добавление новых инстансов при помощи копирования кода, является нерациональным и вносит человеческий фактор.
+В связи с этим рациональнее использовать параметр count, который позволит создавать несколько инстансов одновременно. При этом следует внести небольшие изменения в именование инстансов (внести переменную) а так же в эту переменную обозначить в файле `Output.tf`. Так же в связи с тем, что `Forwarding rule` предоставляет нам IP адрес, следует его тоже внести в отображение файлом `Output.tf`.
