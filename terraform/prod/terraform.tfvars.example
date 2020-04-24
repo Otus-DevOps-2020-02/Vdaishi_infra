@@ -1,0 +1,6 @@
+project = "Yourproject"
+public_key_path = "Yourkeypath"
+disk_image = "disk_image"
+private_key_path = "privatekeypath"
+ssh-key = "sshuser1"
+count_ins = "count"
