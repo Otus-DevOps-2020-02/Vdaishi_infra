@@ -257,12 +257,13 @@ module "app" {
   database_url     = module.db.db_internal_ip
 }
 ```
+
 ###### Управление конфигурацией. Основные инструменты DevOps. Знакомство с Ansible
 
 ### Основы
 Ansible работает в WSL Windows и Linux/Unix машинах и написан на Python.
 
-Установить Ansible можено с помощью пакетного менеджера `pip` или `easy_install`. 
+Установить Ansible можено с помощью пакетного менеджера `pip` или `easy_install`.
 для этого можно использовать одну из перечисленных команд, (в случае использования команд с файлом requirements.txt, требуется его создать со следующим содержимым `ansible>=2.4`)
 ```
 pip install -r requirements.txt
@@ -270,7 +271,7 @@ pip install ansible>=2.4
 easy_install `cat requirements.txt`
 ```
 
-Проверить версию Ansible можно командой 
+Проверить версию Ansible можно командой
 
 ```
 ansible --version
@@ -301,7 +302,7 @@ servername ansible_host=1.2.3.4 ansible_user=username
 ```
 [app] # ⬅ Это название группы
 appserver ansible_host=10.30.20.40 # ⬅ Cписок хостов в данной группе
-vailserver ansible_host=172.30.0.2 
+vailserver ansible_host=172.30.0.2
 
 [db]
 dbserver ansible_host=10.20.30.40
