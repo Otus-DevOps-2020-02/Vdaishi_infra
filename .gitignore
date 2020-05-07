@@ -5,3 +5,5 @@ variables_immutable.json
 *.tfstate.backup
 *.tfvars
 .terraform/
+*gcp.yml
+gcpkey.json
