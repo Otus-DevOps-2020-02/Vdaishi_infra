@@ -7,3 +7,5 @@ variables_immutable.json
 .terraform/
 *gcp.yml
 gcpkey.json
+*.retry
+*~
