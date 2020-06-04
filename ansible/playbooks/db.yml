@@ -4,7 +4,6 @@
   hosts: db
   become: true
   tags: db-tag
-  
-  roles: 
-  - db
 
+  roles:
+  - db
