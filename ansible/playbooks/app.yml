@@ -4,5 +4,6 @@
   hosts: app
   tags: app-tag
   become: true
-  roles: 
+  roles:
    - app
+   - jdauphant.nginx
