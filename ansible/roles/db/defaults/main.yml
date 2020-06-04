@@ -1,0 +1,5 @@
+---
+# defaults file for db
+mongo_bind_ip: 127.0.0.1 # <-- По дефолту ставится значение 127.0.0.1 (задается в блоке vars)
+mongo_port: 27017
+env: local

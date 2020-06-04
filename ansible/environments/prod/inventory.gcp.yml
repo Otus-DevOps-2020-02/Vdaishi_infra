@@ -8,4 +8,4 @@ groups:
   app: "'app' in name"
 filters: []
 auth_kind: serviceaccount
-service_account_file: "./gcpkey.json"
+service_account_file: "./environments/prod/gcpkey.json"

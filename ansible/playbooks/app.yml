@@ -1,0 +1,8 @@
+
+---
+- name: Configure Puma
+  hosts: app
+  tags: app-tag
+  become: true
+  roles: 
+   - app
