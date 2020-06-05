@@ -1,4 +1,5 @@
-db_host: 10.164.15.216
+db_host: "{{ hostvars[groups['db'][0]]['ansible_private_host'] }}"
+
 nginx_sites:
   default:
     - listen 80
