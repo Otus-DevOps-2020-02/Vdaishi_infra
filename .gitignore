@@ -8,3 +8,4 @@ variables_immutable.json
 gcpkey.json
 *.retry
 *~
+jdauphant.nginx

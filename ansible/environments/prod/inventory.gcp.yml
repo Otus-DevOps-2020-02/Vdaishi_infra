@@ -1,0 +1,18 @@
+plugin: gcp_compute
+projects:
+  - infra-271019
+zones:
+  - "europe-west4-a"
+groups:
+  db: "'reddit-db' in name"
+  app: "'reddit-app' in name"
+filters: []
+auth_kind: serviceaccount
+service_account_file: "./environments/stage/gcpkey.json"
+hostnames:
+  # Показываем имена инстансов вместо их IP
+  - name
+compose:
+  # Переменные, которыми мы можем пользоваться для в переменных и плейбуках Ansible
+  ansible_host: networkInterfaces[0].accessConfigs[0].natIP
+  ansible_private_host: networkInterfaces[0].networkIP
