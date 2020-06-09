@@ -695,3 +695,5 @@ inventory файл:
 ```
 db_host: "{{ hostvars[groups['db'][0]]['ansible_private_host'] }}"
 ```
+
+# Vagrant
